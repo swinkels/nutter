@@ -13,7 +13,7 @@
 
 (defun find-nutter-dirs ()
   "Return the names of the nutter directories."
-  (f-directories org-nutter-root))
+  (mapcar 'f-filename (f-directories org-nutter-root)))
 
 (defun select-nutter-dirs ()
   "Return the name of the nutter directories that the user selects.
@@ -22,7 +22,8 @@ name without asking the user."
   (let ((nutter-dirs (find-nutter-dirs)))
     (if (eql (length nutter-dirs) 1)
         nutter-dirs
-      (helm-comp-read "Select nutter directories: " nutter-dirs :marked-candidates t))))
+      (mapcar (lambda (dir-name) (concat (file-name-as-directory org-nutter-root) dir-name))
+              (helm-comp-read "Select nutter directories: " nutter-dirs :marked-candidates t)))))
 
 (defun select-single-nutter-dir ()
   "Return the name of the nutter directory that the user selects.
@@ -31,7 +32,8 @@ name without asking the user."
   (let ((nutter-dirs (find-nutter-dirs)))
     (if (eql (length nutter-dirs) 1)
         nutter-dirs
-      (helm-comp-read "Select single nutter directory: " nutter-dirs))))
+      (concat (file-name-as-directory org-nutter-root)
+              (helm-comp-read "Select single nutter directory: " nutter-dirs)))))
 
 (defun build-filename-prompt ()
   (concat "[" (f-filename org-nutter-capture-target-directory) "] Filename: "))
