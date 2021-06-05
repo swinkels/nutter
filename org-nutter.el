@@ -6,10 +6,10 @@
 (require 'f)
 (provide 'org-nutter)
 
-(defcustom org-nutter-root "~/.org-nutter" "Directory that contains directories to search" :type 'directory)
+(defcustom org-nutter-root "~/.org-nutter" "Directory that contains the nutter directories" :type 'directory)
 
-(defvar org-nutter-last-search-directories nil "Last selected nutter search directories")
-(defvar org-nutter-capture-target-directory nil "Directory where a captured note will be stored")
+(defvar org-nutter-dirs-to-search nil "Default nutter directories to search with org-rifle")
+(defvar org-nutter-dir-for-new-note nil "Default nutter directory for a new note")
 
 (defun find-nutter-dirs ()
   "Return the names of the nutter directories."
@@ -36,7 +36,7 @@ name without asking the user."
               (helm-comp-read "Select single nutter directory: " nutter-dirs)))))
 
 (defun build-filename-prompt ()
-  (concat "[" (f-filename org-nutter-capture-target-directory) "] Filename: "))
+  (concat "[" (f-filename org-nutter-dir-for-new-note) "] Filename: "))
 
 ;; From https://stackoverflow.com/a/53738442
 
@@ -46,7 +46,7 @@ name without asking the user."
   (let ((name (read-string (build-filename-prompt))))
     (expand-file-name (format "%s.org"
                               name)
-                      (concat (file-name-as-directory org-nutter-capture-target-directory)))))
+                      (concat (file-name-as-directory org-nutter-dir-for-new-note)))))
 
 (setq org-capture-templates
       '(("n" "Notes" entry
@@ -55,25 +55,25 @@ name without asking the user."
 
 (defun org-nutter-rifle-new-search-directories ()
   (interactive)
-  (setq org-nutter-last-search-directories (select-nutter-dirs))
-  (when org-nutter-last-search-directories
-    (helm-org-rifle-directories org-nutter-last-search-directories)))
+  (setq org-nutter-dirs-to-search (select-nutter-dirs))
+  (when org-nutter-dirs-to-search
+    (helm-org-rifle-directories org-nutter-dirs-to-search)))
 
 (defun org-nutter-rifle ()
   (interactive)
-  (if org-nutter-last-search-directories
-      (helm-org-rifle-directories org-nutter-last-search-directories)
+  (if org-nutter-dirs-to-search
+      (helm-org-rifle-directories org-nutter-dirs-to-search)
     (org-nutter-rifle-new-search-directories)))
 
 (defun org-nutter-capture-in-new-target-directory ()
   (interactive)
-  (setq org-nutter-capture-target-directory (select-single-nutter-dir))
-  (when org-nutter-capture-target-directory
+  (setq org-nutter-dir-for-new-note (select-single-nutter-dir))
+  (when org-nutter-dir-for-new-note
     (org-capture nil "n")))
 
 (defun org-nutter-capture ()
   (interactive)
-  (if org-nutter-capture-target-directory
+  (if org-nutter-dir-for-new-note
       (org-capture nil "n")
     (org-nutter-capture-in-new-target-directory)))
 
