@@ -33,12 +33,15 @@ name without asking the user."
         nutter-dirs
       (helm-comp-read "Select single nutter directory: " nutter-dirs))))
 
+(defun build-filename-prompt ()
+  (concat "[" (f-filename org-nutter-capture-target-directory) "] Filename: "))
+
 ;; From https://stackoverflow.com/a/53738442
 
 (defun psachin/create-notes-file ()
   "Create an org file in a subdirectory of the org-nutter root."
   (interactive)
-  (let ((name (read-string "Filename: ")))
+  (let ((name (read-string (build-filename-prompt))))
     (expand-file-name (format "%s.org"
                               name)
                       (concat (file-name-as-directory org-nutter-capture-target-directory)))))
