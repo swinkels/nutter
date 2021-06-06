@@ -1,7 +1,7 @@
 (source gnu)
 (source melpa)
 
-(package-file "org-nutter.el")
+(package-file "nutter.el")
 
 ;; (development
 ;;  (depends-on "f")
