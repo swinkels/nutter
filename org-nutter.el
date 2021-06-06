@@ -55,7 +55,7 @@ name without asking the user."
          (file psachin/create-notes-file)
          "*  %?")))
 
-(defun org-nutter-rifle-new-search-directories ()
+(defun org-nutter-rifle-select-directories ()
   (interactive)
   (setq org-nutter-dirs-to-search (select-nutter-dirs))
   (when org-nutter-dirs-to-search
@@ -65,9 +65,9 @@ name without asking the user."
   (interactive)
   (if org-nutter-dirs-to-search
       (helm-org-rifle-directories org-nutter-dirs-to-search)
-    (org-nutter-rifle-new-search-directories)))
+    (org-nutter-rifle-select-directories)))
 
-(defun org-nutter-capture-in-new-target-directory ()
+(defun org-nutter-capture-select-directory ()
   (interactive)
   (setq org-nutter-dir-for-new-note (select-single-nutter-dir))
   (when org-nutter-dir-for-new-note
@@ -77,6 +77,6 @@ name without asking the user."
   (interactive)
   (if org-nutter-dir-for-new-note
       (org-capture nil "n")
-    (org-nutter-capture-in-new-target-directory)))
+    (org-nutter-capture-select-directory)))
 
 ;;; org-nutter.el ends here
