@@ -4,6 +4,8 @@
 ;; Package-Requires: (helm-org-rifle)
 
 (require 'f)
+(require 'helm-org-rifle)
+
 (provide 'org-nutter)
 
 (defcustom org-nutter-root "~/.org-nutter" "Directory that contains the nutter directories" :type 'directory)
