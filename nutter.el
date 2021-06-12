@@ -5,10 +5,13 @@
 
 (require 'f)
 (require 'helm-org-rifle)
+(require 'yasnippet)
 
 (provide 'nutter)
 
 (defcustom nutter-root "~/.nutter" "Directory that contains the nutter directories" :type 'directory)
+
+(defcustom nutter-yasnippet-for-new-note "title" "yasnippet to insert for a new note" :type 'string)
 
 (defvar nutter-dirs-to-search nil "Default nutter directories to search with org-rifle")
 (defvar nutter-dir-for-new-note nil "Default nutter directory for a new note")
@@ -50,11 +53,6 @@ name without asking the user."
                               name)
                       (concat (file-name-as-directory nutter-dir-for-new-note)))))
 
-(setq org-capture-templates
-      '(("n" "Notes" entry
-         (file psachin/create-notes-file)
-         "*  %?")))
-
 (defun nutter-rifle-select-directories ()
   (interactive)
   (setq nutter-dirs-to-search (select-nutter-dirs))
@@ -71,12 +69,14 @@ name without asking the user."
   (interactive)
   (setq nutter-dir-for-new-note (select-single-nutter-dir))
   (when nutter-dir-for-new-note
-    (org-capture nil "n")))
+    (nutter-capture)))
 
 (defun nutter-capture ()
   (interactive)
   (if nutter-dir-for-new-note
-      (org-capture nil "n")
+      (let ((note-path (psachin/create-notes-file)))
+        (find-file note-path)
+        (yas-expand-snippet (yas-lookup-snippet nutter-yasnippet-for-new-note)))
     (nutter-capture-select-directory)))
 
 ;;; nutter.el ends here
