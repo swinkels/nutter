@@ -54,7 +54,6 @@ name without asking the user."
 (defun nutter--ask-new-note-path ()
   "Return the path to the new note file.
 This function asks the user for the name of the new note file."
-  (interactive)
   (let ((file-name (nutter--ask-file-name)))
     (expand-file-name (nutter--add-dotorg-extension file-name) nutter-dir-for-new-note)))
 
