@@ -1,4 +1,4 @@
-;;; nutter.el --- Provide commands to search directories of org files
+;;; nutter.el --- Create and search notes in directories of org files
 
 ;; Version: 0.0.0
 ;; Package-Requires: (f helm-org-rifle yasnippet)
@@ -78,8 +78,8 @@ This function asks the user for the name of the new note file."
 (defun nutter-capture ()
   (interactive)
   (if nutter-dir-for-new-note
-      (let ((note-path (nutter--ask-new-note-path)))
-        (find-file note-path)
+      (progn
+        (find-file (nutter--ask-new-note-path))
         (yas-expand-snippet (yas-lookup-snippet nutter-yasnippet-for-new-note)))
     (nutter-capture-select-directory)))
 
