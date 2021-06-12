@@ -1,17 +1,26 @@
-;;; nutter.el --- Create and search notes in directories of org files
+;;; nutter.el --- Create and search notes in directories of org-mode files
 
 ;; Version: 0.0.0
-;; Package-Requires: (f helm-org-rifle yasnippet)
+;; Package-Requires: (f helm helm-org-rifle yasnippet)
 
 (require 'f)
+(require 'helm-mode)
 (require 'helm-org-rifle)
 (require 'yasnippet)
 
 (provide 'nutter)
 
-(defcustom nutter-root "~/.nutter" "Directory that contains the nutter directories" :type 'directory)
+(defgroup nutter nil
+  "Create and search notes in directories of org-mode files."
+  :group 'convenience)
 
-(defcustom nutter-yasnippet-for-new-note "title" "yasnippet to insert for a new note" :type 'string)
+(defcustom nutter-root "~/.nutter"
+  "Directory that contains the nutter directories."
+  :type 'directory :group 'nutter)
+
+(defcustom nutter-yasnippet-for-new-note "title"
+  "Name of yasnippet template to insert for a new note."
+  :type 'string :group 'nutter)
 
 (defvar nutter-dirs-to-search nil "Default nutter directories to search with org-rifle")
 (defvar nutter-dir-for-new-note nil "Default nutter directory for a new note")
