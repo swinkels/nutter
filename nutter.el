@@ -1,7 +1,7 @@
 ;;; nutter.el --- Provide commands to search directories of org files
 
 ;; Version: 0.0.0
-;; Package-Requires: (helm-org-rifle)
+;; Package-Requires: (f helm-org-rifle yasnippet)
 
 (require 'f)
 (require 'helm-org-rifle)
@@ -43,15 +43,20 @@ name without asking the user."
 (defun build-filename-prompt ()
   (concat "[" (f-filename nutter-dir-for-new-note) "] Filename: "))
 
-;; From https://stackoverflow.com/a/53738442
+(defun nutter--ask-file-name ()
+  (read-string (build-filename-prompt)))
 
-(defun psachin/create-notes-file ()
-  "Create an org file in a subdirectory of the nutter root."
+(defun nutter--add-dotorg-extension (name)
+  (if (not (string-suffix-p ".org" name))
+      (format "%s.org" name)
+    name))
+
+(defun nutter--ask-new-note-path ()
+  "Return the path to the new note file.
+This function asks the user for the name of the new note file."
   (interactive)
-  (let ((name (read-string (build-filename-prompt))))
-    (expand-file-name (format "%s.org"
-                              name)
-                      (concat (file-name-as-directory nutter-dir-for-new-note)))))
+  (let ((file-name (nutter--ask-file-name)))
+    (expand-file-name (nutter--add-dotorg-extension file-name) nutter-dir-for-new-note)))
 
 (defun nutter-rifle-select-directories ()
   (interactive)
@@ -74,7 +79,7 @@ name without asking the user."
 (defun nutter-capture ()
   (interactive)
   (if nutter-dir-for-new-note
-      (let ((note-path (psachin/create-notes-file)))
+      (let ((note-path (nutter--ask-new-note-path)))
         (find-file note-path)
         (yas-expand-snippet (yas-lookup-snippet nutter-yasnippet-for-new-note)))
     (nutter-capture-select-directory)))
