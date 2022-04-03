@@ -35,7 +35,7 @@ If there is only one such directory, this function returns its
 name without asking the user."
   (let ((nutter-dirs (find-nutter-dirs)))
     (if (eql (length nutter-dirs) 1)
-        nutter-dirs
+        (concat (file-name-as-directory nutter-root) (car nutter-dirs))
       (mapcar (lambda (dir-name) (concat (file-name-as-directory nutter-root) dir-name))
               (helm-comp-read "Select nutter directories: " nutter-dirs :marked-candidates t)))))
 
@@ -45,7 +45,7 @@ If there is only one such directory, this function returns its
 name without asking the user."
   (let ((nutter-dirs (find-nutter-dirs)))
     (if (eql (length nutter-dirs) 1)
-        nutter-dirs
+        (concat (file-name-as-directory nutter-root) (car nutter-dirs))
       (concat (file-name-as-directory nutter-root)
               (helm-comp-read "Select single nutter directory: " nutter-dirs)))))
 
